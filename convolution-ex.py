@@ -20,7 +20,7 @@ b_conv1 = cnv.bias_variable([32])
 x_image = tf.reshape(x, [-1, 28, 28, 1])
 
 # Convolve layer with filter
-h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
+h_conv1 = tf.nn.relu(cnv.conv2d(x_image, W_conv1) + b_conv1)
 h_pool1 = cnv.max_pool_2x2(h_conv1)
 
 # ------------------------------------------ #
@@ -32,7 +32,7 @@ W_conv2 = cnv.weight_variable([5, 5, 32, 64])
 b_conv2 = cnv.bias_variable([64])
 
 # ReLU activation function & Max-pooling layer
-h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
+h_conv2 = tf.nn.relu(cnv.conv2d(h_pool1, W_conv2) + b_conv2)
 h_pool2 = cnv.max_pool_2x2(h_conv2)
 
 # ------------------------------------------ #
