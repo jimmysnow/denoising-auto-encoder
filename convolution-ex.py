@@ -101,4 +101,5 @@ def run_convolutional_mnist_model(training_algo, accuracy_calc, batch_size):
 batch_size = 100
 run_convolutional_mnist_model(training_algo, accuracy_calc, batch_size)
 
+print('Done!')
 
