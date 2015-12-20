@@ -91,7 +91,6 @@ def run_convolutional_mnist_model(training_algo, accuracy_calc, batch_size):
                 print("Epoch: %d, Training Accuracy: %g" % (i, train_accuracy))
             training_algo.run(feed_dict={x:batch[0], t:batch[1], keep_prob:0.5})
             
-        for i in range(len(mnist.test.images))
         test_acc = accuracy_calc.eval(feed_dict={x:mnist.test.images, t:mnist.test.labels, keep_prob:1.0})
         print("Test Accuracy: %g" % test_acc)
 
