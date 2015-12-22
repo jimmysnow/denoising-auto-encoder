@@ -77,14 +77,16 @@ def read_img_data(one_hot_dict, file_dict):
 	# Run session...
 	print('Starting tensorflow session...')
 	with tf.Session() as sess:
-		sess.run(init)
-		#coord = tf.train.Coordinator()
-		#threads = tf.train.start_queue_runners(coord=coord)
-		for i in range(len(files)):
-			jpg = jpg_img.eval()
-			img_files.append(jpg)
-		#coord.request_stop()
-		#coord.join(threads)
+		with tf.device('/cpu:0'):
+			sess.run(init)
+			coord = tf.train.Coordinator()
+			threads = tf.train.start_queue_runners(coord=coord)
+			for i in range(len(files)):
+				jpg = jpg_img.eval()
+				img_files.append(jpg)
+			coord.request_stop()
+			coord.join(threads)
+		
 	# build numpy arrays
 	print('Reconstructing arrays...')
 	img_files = numpy.asarray(img_files)
