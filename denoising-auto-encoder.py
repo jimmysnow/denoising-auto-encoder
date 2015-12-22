@@ -95,15 +95,20 @@ def read_img_data(one_hot_dict, file_dict):
 	print('Done!')	
 	return img_files, labels
 
-# --------- PROGRAM START ------------- #
-
-read_img_data(train_labels_one_hot, train_imgs)
-
+# ------------------------------------- #
 # --------- TRAIN & TEST SETS --------- #
+# ------------------------------------- #
+
 train_imgs, train_labels = get_train_data()
 test_imgs, test_labels = get_test_data()
 
 train_labels_one_hot = get_one_hot_label_list(train_labels)
 test_labels_one_hot = get_one_hot_label_list(test_labels)
+
+# ------------------------------------- #
+# --------- PROGRAM START ------------- #
+# ------------------------------------- #
+
+read_img_data(train_labels_one_hot, train_imgs)
 
 
