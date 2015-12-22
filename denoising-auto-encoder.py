@@ -92,6 +92,8 @@ def read_img_data(one_hot_dict, file_dict):
 	img_files = numpy.asarray(img_files)
 	labels = numpy.asarray(labels)
 	print('Done!')
+	print(img_files)
+	print(labels)
 	return img_files, labels
 
 # ------------------------------------- #
