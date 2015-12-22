@@ -70,10 +70,11 @@ def read_img_data(one_hot_dict, file_dict):
 	for (img, label_vec) in one_hot_dict:
 		files.append(file_dict[img])
 		labels.append(label_vec)
-	labels = numpy.asarray(labels)
 	queue = tf.train.string_input_producer(files)
 	jpg_key, jpg_img = reader.read(queue)
 	jpg_img = tf.image.decode_jpeg(jpg_img)
+	jpg_tensor = tf.convert_to_tensor(jpg_img)
+	jpg_tensor_resized = tf.image.resize_images(jpg_tensor, 256, 256)
 	init = tf.initialize_all_variables()
 	# Run session...
 	print('Starting tensorflow session...')
@@ -82,17 +83,15 @@ def read_img_data(one_hot_dict, file_dict):
 		coord = tf.train.Coordinator()
 		threads = tf.train.start_queue_runners(coord=coord)
 		for i in range(len(files)):
-			jpg = jpg_img.eval()
+			jpg = jpg_tensor_resized.eval()
 			img_files.append(jpg)
 		coord.request_stop()
 		coord.join(threads)
-		# build numpy arrays
-		print('Reconstructing arrays...')
-		img_files = numpy.asarray(img_files)
-		img_files = tf.convert_to_tensor(img_files)
-		tf.Print(img_files)
-		img_files = tf.image.resize_images(img_files, 256, 256)
-	print('Done!')	
+	# build numpy arrays
+	print('Reconstructing arrays...')
+	img_files = numpy.asarray(img_files)
+	labels = numpy.asarray(labels)
+	print('Done!')
 	return img_files, labels
 
 # ------------------------------------- #
