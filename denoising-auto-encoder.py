@@ -64,7 +64,7 @@ def get_one_hot_label_list(label_dict):
 def read_img_data(one_hot_dict, file_dict):
 	labels = []
 	files = []
-	img_files = []
+	img_files = numpy.empty(0)
 	reader = tf.WholeFileReader()
 	print('Assembling files...')
 	for (img, label_vec) in one_hot_dict:
@@ -72,7 +72,8 @@ def read_img_data(one_hot_dict, file_dict):
 		labels.append(label_vec)
 	queue = tf.train.string_input_producer(files)
 	jpg_key, jpg_img = reader.read(queue)
-	jpg_img = tf.image.decode_jpeg(jpg_img)
+	# grey-scale the image...
+	jpg_img = tf.image.decode_jpeg(jpg_img, channels=1)
 	init = tf.initialize_all_variables()
 	# Run session...
 	print('Starting tensorflow session...')
@@ -82,18 +83,16 @@ def read_img_data(one_hot_dict, file_dict):
 			coord = tf.train.Coordinator()
 			threads = tf.train.start_queue_runners(coord=coord)
 			for i in range(len(files)):
-				jpg = jpg_img.eval()
-				img_files.append(jpg)
+				jpg = tf.reshape(jpg_img.eval(), [256, 256])
+				numpy.append(img_files, jpg)
 			coord.request_stop()
 			coord.join(threads)
-		
+			
 	# build numpy arrays
 	print('Reconstructing arrays...')
 	img_files = numpy.asarray(img_files)
 	labels = numpy.asarray(labels)
 	print('Done!')
-	print(img_files)
-	print(labels)
 	return img_files, labels
 
 # ------------------------------------- #
@@ -110,6 +109,6 @@ test_labels_one_hot = get_one_hot_label_list(test_labels)
 # --------- PROGRAM START ------------- #
 # ------------------------------------- #
 
-read_img_data(train_labels_one_hot, train_imgs)
+img_files, labels = read_img_data(train_labels_one_hot, train_imgs)
 
 
